@@ -18,17 +18,8 @@ const arrays = {
 
 }
 
-// global variables, woo!
-let programInfo = null
-let bufferInfo = null
-
-function start() {
-  programInfo = twgl.createProgramInfo(gl, [vs, fs])
-
-  bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays)
-
-  window.requestAnimationFrame(render)
-}
+const programInfo = twgl.createProgramInfo(gl, [vs, fs])
+const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays)
 
 function render(time) {
   twgl.resizeCanvasToDisplaySize(gl.canvas)
@@ -43,6 +34,5 @@ function render(time) {
 
   window.requestAnimationFrame(render)
 }
-
-start()
+window.requestAnimationFrame(render)
 
