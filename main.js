@@ -60,8 +60,7 @@ function render(time) {
   twgl.resizeCanvasToDisplaySize(gl.canvas)
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
   const uniforms = {
-    time: time * 0.001,
-    resolution: [gl.canvas.width, gl.canvas.height],
+    u_resolution: [gl.canvas.width, gl.canvas.height],
   }
   gl.useProgram(programInfo.program)
   twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo)

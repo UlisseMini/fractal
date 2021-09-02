@@ -1,16 +1,48 @@
 precision mediump float;
 
-uniform vec2 resolution;
-uniform float time;
+uniform vec2 u_resolution;
+
+vec2 f(vec2 z, vec2 c) {
+  // z^2 + c, written out
+  return vec2(z.x*z.x - z.y*z.y, 2.0*z.y*z.x) + c;
+
+  /* z^2 + c written with a matrix multiply
+  return c + mat2(
+      z.x, z.y,
+      -z.y, z.x
+  )*z;
+  */
+}
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / resolution;
-  float color = 0.0;
-  // lifted from glslsandbox.com
-  color += sin(uv.x * cos(time / 3.0) * 60.0) + cos(uv.y * cos(time / 2.80) * 10.0);
-  color += sin(uv.y * sin(time / 2.0) * 40.0) + cos(uv.x * sin(time / 1.70) * 40.0);
-  color += sin(uv.x * sin(time / 1.0) * 10.0) + sin(uv.y * sin(time / 3.50) * 80.0);
-  color *= sin(time / 10.0) * 0.5;
+  vec2 uv = gl_FragCoord.xy / u_resolution;
 
-  gl_FragColor = vec4(vec3(color * 0.5, sin(color + time / 2.5) * 0.75, color), 1.0);
+  float color = 0.0;
+
+  // scale to x to (-2.5, 1), and y to (-1, 1)
+  // they're already in (0, 1) from dividing by u_resolution
+  // TODO: add dynamic zoom
+  vec2 c = vec2(uv.x * 3.5 - 2.5, uv.y * 2.0 - 1.0);
+
+
+  vec2 z = vec2(0.0);
+  bool escaped = false;
+
+  int iterations = 0;
+  const int maxIterations = 100;
+  for (int i = 0; i < maxIterations; i++) {
+    iterations = i; // webgl :<(
+    z = f(z, c);
+    if (length(z) > 2.0) {
+      escaped = true;
+      break;
+    }
+  }
+
+  float k = float(iterations)/float(maxIterations);
+  if (escaped) {
+    gl_FragColor = vec4(0.0, k, 0.0, 1.0);
+  } else {
+    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+  }
 }
