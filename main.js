@@ -1,5 +1,7 @@
 import "./style.css"
 import * as twgl from "twgl.js"
+import fs from "./fragment-shader.glsl?raw"
+import vs from "./vertex-shader.glsl?raw"
 
 const width = document.documentElement.clientWidth
 const height = document.documentElement.clientHeight
@@ -11,34 +13,6 @@ document.body.appendChild(canvas)
 
 const gl = canvas.getContext("webgl")
 
-async function loadVertexShader() {
-  const resp = await fetch('/vertex-shader.glsl')
-  const source = await resp.text()
-
-  const el = document.createElement('script')
-  el.type = 'notjs'
-  el.id = 'vs'
-  el.textContent = source
-
-  document.body.appendChild(el)
-
-  return el
-}
-
-async function loadFragmentShader() {
-  const resp = await fetch('/fragment-shader.glsl')
-  const source = await resp.text()
-
-  const el = document.createElement('script')
-  el.type = 'notjs'
-  el.id = 'fs'
-  el.textContent = source
-
-  document.body.appendChild(el)
-
-  return el
-}
-
 const arrays = {
   position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
 
@@ -49,7 +23,7 @@ let programInfo = null
 let bufferInfo = null
 
 function start() {
-  programInfo = twgl.createProgramInfo(gl, ["vs", "fs"])
+  programInfo = twgl.createProgramInfo(gl, [vs, fs])
 
   bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays)
 
@@ -70,7 +44,7 @@ function render(time) {
   window.requestAnimationFrame(render)
 }
 
-Promise.all([loadFragmentShader(), loadVertexShader()]).then(start)
+start()
 
 
 /*
