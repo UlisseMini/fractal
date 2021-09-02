@@ -1,0 +1,15 @@
+{
+  "name": "fractal",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.5.1"
+  },
+  "dependencies": {
+    "twgl.js": "^4.19.2"
+  }
+}
