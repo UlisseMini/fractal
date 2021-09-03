@@ -32,7 +32,7 @@ function render(time) {
   twgl.setUniforms(programInfo, uniforms)
   twgl.drawBufferInfo(gl, bufferInfo)
 
-  window.requestAnimationFrame(render)
+  // window.requestAnimationFrame(render)
 }
 window.requestAnimationFrame(render)
 
